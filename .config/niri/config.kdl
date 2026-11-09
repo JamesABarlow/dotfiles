@@ -45,7 +45,7 @@ input {
     mouse {
         // off
         // natural-scroll
-        accel-speed -0.1
+        accel-speed 0
         accel-profile "flat"
         // scroll-method "no-scroll"
     }
@@ -66,7 +66,7 @@ input {
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    // focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="0%"
 }
 
 // You can configure outputs by their name, which you can find
@@ -85,7 +85,7 @@ output "DP-2" {
     // for the resolution.
     // If the mode is omitted altogether or is invalid, niri will pick one automatically.
     // Run `niri msg outputs` while inside a niri instance to list all outputs and their modes.
-    mode "2560x1440@120"
+    mode "2560x1440"
 
     // You can use integer or fractional scale, for example use 1.5 for 150% scale.
     scale 1
@@ -171,7 +171,7 @@ layout {
         // off
 
         // How many logical pixels the ring extends out from the windows.
-        width 4
+        width 2
 
         // Colors can be set in a variety of ways:
         // - CSS named colors: "red"
@@ -281,7 +281,8 @@ layout {
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
 
-spawn-at-startup "waybar"
+// spawn-at-startup "waybar"
+spawn-at-startup "qs"
 
 spawn-at-startup "awww-daemon"
 // spawn-sh-at-startup "systemctl --user start stixChangeBackground.timer"
@@ -341,6 +342,24 @@ window-rule {
     open-floating true
 }
 
+// Stream setup (see stream-start.sh). Does nothing unless the named workspace exists.
+window-rule {
+    match app-id=r#"^firefox-stream-hub$"#
+    match app-id=r#"^com\.github\.wwmm\.easyeffects$"#
+    match app-id=r#"^org\.pulseaudio\.pavucontrol$"#
+    open-on-workspace "stream-hub"
+}
+
+window-rule {
+    match app-id=r#"^firefox-stream-hub$"#
+    default-column-width { proportion 1.0; }
+}
+
+window-rule {
+    match app-id=r#"^com\.obsproject\.Studio$"#
+    open-on-workspace "stream-monitor"
+}
+
 // Example: block out two password managers from screen capture.
 // (This example rule is commented out with a "/-" in front.)
 /-window-rule {
@@ -355,8 +374,15 @@ window-rule {
 
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
-    geometry-corner-radius 12
+// Battle.net (via Lutris/umu) maps a stray empty 160x20 Wine window; make it invisible.
+// window-rule {
+//     match app-id="^steam_app_default$" title="^$"
+//     open-floating true
+//     opacity 0.0
+// }
+
+window-rule {
+    geometry-corner-radius 8
     clip-to-geometry true
 }
 
